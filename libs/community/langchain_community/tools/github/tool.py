@@ -26,12 +26,10 @@ class GitHubAction(BaseTool):
     args_schema: Optional[Type[BaseModel]] = None
 
     def _run(
-        self,
-        instructions: Optional[str] = "",
-        run_manager: Optional[CallbackManagerForToolRun] = None,
+        self, run_manager: Optional[CallbackManagerForToolRun] = None, **kwargs: Any
     ) -> str:
         """Use the GitHub API to run an operation."""
-        if not instructions or instructions == "{}":
+        if not kwargs or kwargs == {}:
             # Catch other forms of empty input that GPT-4 likes to send.
-            instructions = ""
-        return self.api_wrapper.run(self.mode, instructions)
+            return self.api_wrapper.run(self.mode, "")
+        return self.api_wrapper.run(self.mode, list(kwargs.values())[0])
